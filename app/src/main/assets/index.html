@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+    <title>PDF Viewer</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <style type="text/css">
+        canvas {
+            width: 100%;
+            border: 1px solid black;
+        }
+    </style>
+    <script type="text/javascript" src="pdf.min.js"></script>
+    <script type="text/javascript">
+        const url = location.search.substring(1);
+
+        PDFJS.cMapUrl = 'cmaps/';
+        PDFJS.cMapPacked = true;
+
+        let pdfDoc = null;
+
+        function createPage() {
+        const div = document.createElement('canvas');
+        document.body.appendChild(div);
+        return div;
+        }
+
+        function renderPage(num) {
+            pdfDoc.getPage(num).then((page) => {
+            let scale = 1;
+            let viewport = page.getViewport(scale);
+            let canvas = createPage();
+            let ctx = canvas.getContext('2d');
+
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            let renderTask = page.render({
+                canvasContext: ctx,
+                viewport
+            });
+            renderTask.then(() => {
+                if(num < pdfDoc.numPages) {
+                    renderPage(num+1);
+                }
+            });
+        });
+        }
+
+        PDFJS.getDocument(url).then((pdf) => {
+            pdfDoc = pdf;
+            renderPage(1);
+        });
+    </script>
+</head>
+<body>
+</body>
+</html>
