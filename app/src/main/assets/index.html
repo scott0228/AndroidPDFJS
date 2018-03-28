@@ -21,14 +21,14 @@
         let pdfDoc = null;
 
         function createPage() {
-        const div = document.createElement('canvas');
-        document.body.appendChild(div);
-        return div;
+            const div = document.createElement('canvas');
+            document.body.appendChild(div);
+            return div;
         }
 
         function renderPage(num) {
             pdfDoc.getPage(num).then((page) => {
-            let scale = 1;
+            let scale = 2;
             let viewport = page.getViewport(scale);
             let canvas = createPage();
             let ctx = canvas.getContext('2d');
