@@ -51,6 +51,8 @@
         PDFJS.getDocument(url).then((pdf) => {
             pdfDoc = pdf;
             renderPage(1);
+        }).catch((error) => {
+            alert(error);
         });
     </script>
 </head>
